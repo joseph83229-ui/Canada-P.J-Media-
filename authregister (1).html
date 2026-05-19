@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account - Canada P.J Media</title>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card" style="max-width:520px">
+    <div class="auth-logo">
+      <img src="../logo.png" alt="Canada P.J Media" onerror="this.style.display='none'"/>
+      <div class="brand-text" style="text-align:center;margin-top:8px">
+        <span class="brand-main">Canada P.J Media</span>
+        <span class="brand-sub">Academic Media Hub</span>
+      </div>
+    </div>
+
+    <h2>Create Your Account</h2>
+    <p class="auth-sub">Join thousands of students on Canada P.J Media</p>
+
+    <div id="regAlert" class="alert alert-error hidden"></div>
+    <div id="regSuccess" class="alert alert-success hidden"><i class="fas fa-check-circle"></i> Account created! Redirecting...</div>
+
+    <form id="registerForm" onsubmit="handleRegister(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-user"></i>
+            <input type="text" id="regFirstName" placeholder="First name" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-user"></i>
+            <input type="text" id="regLastName" placeholder="Last name" required/>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="regEmail" placeholder="your@email.com" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-phone"></i>
+          <input type="tel" id="regPhone" placeholder="+234 800 000 0000" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>State / Location</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-map-marker-alt"></i>
+          <input type="text" id="regState" placeholder="e.g. Enugu, Lagos, Abroad"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="regPassword" placeholder="Min 8 characters" required minlength="8"/>
+          <span class="toggle-pw" onclick="togglePw('regPassword',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-light)"><i class="fas fa-eye"></i></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="regConfirm" placeholder="Repeat password" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Referral Code <span style="color:var(--text-light);font-weight:400">(optional)</span></label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-link"></i>
+          <input type="text" id="regReferral" placeholder="Enter referral code if you have one"/>
+        </div>
+      </div>
+      <div style="margin-bottom:18px;font-size:0.82rem;color:var(--text-light)">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer">
+          <input type="checkbox" id="regTerms" style="width:auto;margin-top:2px" required/>
+          I agree to the <a href="#" style="color:var(--blue-primary);margin:0 3px">Terms of Use</a> and <a href="#" style="color:var(--blue-primary)">Privacy Policy</a>
+        </label>
+      </div>
+      <button type="submit" class="form-btn"><i class="fas fa-user-plus"></i> Create Account & Get Referral Link</button>
+    </form>
+
+    <p class="auth-links" style="margin-top:16px">
+      Already have an account? <a href="login.html">Sign In</a>
+    </p>
+    <p class="auth-links" style="margin-top:8px">
+      <a href="../index.html"><i class="fas fa-arrow-left"></i> Back to Homepage</a>
+    </p>
+  </div>
+</div>
+
+<script>
+function togglePw(id, el) {
+  const inp = document.getElementById(id);
+  if (inp.type === 'password') { inp.type = 'text'; el.innerHTML = '<i class="fas fa-eye-slash"></i>'; }
+  else { inp.type = 'password'; el.innerHTML = '<i class="fas fa-eye"></i>'; }
+}
+
+function generateReferralCode(name) {
+  const base = name.replace(/\s/g,'').toUpperCase().slice(0,4);
+  return base + Math.floor(1000 + Math.random() * 9000);
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const alertBox = document.getElementById('regAlert');
+  const successBox = document.getElementById('regSuccess');
+  alertBox.classList.add('hidden');
+  successBox.classList.add('hidden');
+
+  const firstName = document.getElementById('regFirstName').value.trim();
+  const lastName = document.getElementById('regLastName').value.trim();
+  const email = document.getElementById('regEmail').value.trim().toLowerCase();
+  const phone = document.getElementById('regPhone').value.trim();
+  const state = document.getElementById('regState').value.trim();
+  const pass = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  const referral = document.getElementById('regReferral').value.trim().toUpperCase();
+
+  if (pass !== confirm) {
+    alertBox.textContent = 'Passwords do not match.';
+    alertBox.classList.remove('hidden');
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('cpj_users') || '[]');
+  if (users.find(u => u.email === email)) {
+    alertBox.textContent = 'An account with this email already exists.';
+    alertBox.classList.remove('hidden');
+    return;
+  }
+
+  // Process referral
+  if (referral) {
+    const referrer = users.find(u => u.referralCode === referral);
+    if (referrer) {
+      referrer.referralCount = (referrer.referralCount || 0) + 1;
+    }
+  }
+
+  const newUser = {
+    id: 'user_' + Date.now(),
+    name: firstName + ' ' + lastName,
+    firstName, lastName, email, phone, state,
+    password: pass,
+    role: 'user',
+    referralCode: generateReferralCode(firstName),
+    referralCount: 0,
+    joinedBy: referral || null,
+    joined: new Date().toISOString(),
+    earnings: 0
+  };
+
+  users.push(newUser);
+  localStorage.setItem('cpj_users', JSON.stringify(users));
+  localStorage.setItem('cpj_current_user', JSON.stringify(newUser));
+
+  successBox.classList.remove('hidden');
+  setTimeout(() => window.location.href = '../dashboard.html', 1400);
+}
+</script>
+</body>
+</html>
